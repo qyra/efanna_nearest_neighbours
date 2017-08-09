@@ -5,6 +5,7 @@
 
 #include "efannaConfig.h"
 #include "kdtree.hpp"
+#include "heap.hpp"
 
 void loadConfig(struct configStruct& options){
     const char* cfgPath = "efanna.cfg";
@@ -29,5 +30,9 @@ int main (int argc, char *argv[])
 
     KDTree kdtree(options);
     std::cout << "Root: " << kdtree.root << std::endl;
+
+    Heap heap(12);
+    std::cout << "Max items: " << heap.max_items << std::endl;
+
     return 0;
 }
