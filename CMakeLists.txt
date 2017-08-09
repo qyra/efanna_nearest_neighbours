@@ -20,7 +20,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -O1 -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer")
 
 # Modify this to add new source files. Their .h files should be in the include folder.
-add_executable(efanna src/main.cpp)
+add_executable(efanna src/main.cpp src/kdtree.cpp)
 
 set (EXTRA_LIBS ${EXTRA_LIBS} config++)
 target_link_libraries (efanna  ${EXTRA_LIBS})

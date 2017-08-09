@@ -1,5 +1,10 @@
+#include "kdtree.hpp"
+
 #include <iostream>
 
-int main(){
-    std::cout <<"Hello"<<std::endl;
+#include "efannaConfig.h"
+
+KDTree::KDTree(struct configStruct& opts)
+{
+    this->root = 1;
 }

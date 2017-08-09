@@ -1,7 +1,10 @@
 // A simple program that computes the square root of a number
-#include "efannaConfig.h"
+
 #include <iostream>
 #include <libconfig.h++>
+
+#include "efannaConfig.h"
+#include "kdtree.hpp"
 
 void loadConfig(struct configStruct& options){
     const char* cfgPath = "efanna.cfg";
@@ -23,5 +26,8 @@ int main (int argc, char *argv[])
     struct configStruct options;
     loadConfig(options);
     std::cout << "pi == " << options.pi << std::endl;
+
+    KDTree kdtree(options);
+    std::cout << "Root: " << kdtree.root << std::endl;
     return 0;
 }
