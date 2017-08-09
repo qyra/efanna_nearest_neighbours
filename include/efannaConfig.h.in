@@ -1,0 +1,12 @@
+#pragma once
+
+#define Swoop_VERSION_MAJOR @Swoop_VERSION_MAJOR@
+#define Swoop_VERSION_MINOR @Swoop_VERSION_MINOR@
+#include <string>
+
+struct configStruct {
+    float pi = 3;
+    int numtrees = 960;
+    bool fullscreen = false;
+    std::string title = "Swoop";
+};
