@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <libconfig.h++>
+#include <random>
 
 #include "efannaConfig.h"
 #include "kdtree.hpp"
@@ -31,8 +32,20 @@ int main (int argc, char *argv[])
     KDTree kdtree(options);
     std::cout << "Root: " << kdtree.root << std::endl;
 
-    Heap heap(12);
+    Heap heap(5);
     std::cout << "Max items: " << heap.max_items << std::endl;
+
+    std::mt19937 gen(0); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> dis(1, 100);
+
+    for(int i = 0; i < 10; i = i + 1){
+        float cost = dis(gen);
+        int val = dis(gen);
+        std::cout <<"Inserting " << cost << ", " << val << std::endl;
+        heap.insert(val, cost);
+        heap.printHeap();
+        std::cout << std::endl << std::endl;
+    }
 
     return 0;
 }
