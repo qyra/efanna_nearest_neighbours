@@ -21,8 +21,8 @@ cmake ../ -DCMAKE_BUILD_TYPE=RELEASE
 You can remove the build folder at any time to clean up and start over.
 
 Roadmap:
-* Implement neighbour heap (In Progress)
-* Implement kdtrees for filtering
+* Implement neighbour heap (Done)
+* Implement kdtrees for filtering (Done)
 * Implement graph-clustering
 * Combine them all to perform an EFANNA KNN search
 
