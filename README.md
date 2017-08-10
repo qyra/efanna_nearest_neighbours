@@ -21,10 +21,13 @@ cmake ../ -DCMAKE_BUILD_TYPE=RELEASE
 You can remove the build folder at any time to clean up and start over.
 
 Roadmap:
-* Implement neighbour heap (Done)
+* Implement bounded heap (Done)
 * Implement kdtrees for filtering (Done)
 * Implement graph-clustering
-* Combine them all to perform an EFANNA KNN search
+* Combine them all to perform faster knn search
+* Improve testing strategy - accuracy of results is pseudorandom, but given a set seed the output will be deterministic.
+* Add cmake build options to support disabling sanitize for cachegrind, or disabling specific flags for mac.
+* Add benchmarks, compare to the original program and other implementations of KNN.
 
 Currently only linux is supported for testing, to take full advantage of the
 testing options with clang for this platform. Release builds for
