@@ -4,7 +4,7 @@
 #define Swoop_VERSION_MINOR @Swoop_VERSION_MINOR@
 #include <string>
 
-struct configStruct {
+struct ConfigStruct {
     float pi = 3;
     int numtrees = 960;
     bool fullscreen = false;

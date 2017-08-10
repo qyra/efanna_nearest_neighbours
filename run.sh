@@ -4,4 +4,6 @@ cd build
 make
 mv efanna ../
 cd ../
-./efanna
+time ./efanna
+#~ /usr/bin/time -v ./efanna
+#~ valgrind --tool=callgrind ./efanna # use kcachegrind to read the callgrind.out.x file.

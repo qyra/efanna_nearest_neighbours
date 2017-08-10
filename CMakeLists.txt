@@ -7,8 +7,8 @@ set (Efanna_VERSION_MINOR 1)
 set (CMAKE_CXX_STANDARD 14)
 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/include/efannaConfig.h.in"
-  "${PROJECT_BINARY_DIR}/efannaConfig.h"
+  "${PROJECT_SOURCE_DIR}/include/efanna_config.hpp.in"
+  "${PROJECT_BINARY_DIR}/efanna_config.hpp"
 )
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
@@ -17,7 +17,15 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_BINARY_DIR}")
 
 # If in debug mode, use address sanitizer.
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -O1 -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer")
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -O1 -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer")
+
+# Don't use address san with kcachegrind.
+#~ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall")
+
+# If in release enable higher optimization level
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -O3")
+
 
 # Modify this to add new source files. Their .h files should be in the include folder.
 add_executable(efanna src/main.cpp src/kdtree.cpp src/heap.cpp)

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cfloat>
+#include <deque>
 
 struct HeapItem
 {
@@ -9,20 +10,20 @@ struct HeapItem
     float cost;
 };
 
-class Heap
+class BoundedHeap
 {
 public:
-    Heap(int max_items);
-    ~Heap();
-
+    BoundedHeap(int max_items);
     void insert(int value, float cost);
-
-    void printHeap();
+    void collect_neighbours(std::deque<float>& costs, std::deque<int>& ids);
+    float tau();
+    void print_heap();
 
 private:
-    void siftUp(int i);
-    void siftDownTop();
+    void sift_up(int i);
+    void sift_down();
     void swap(int a, int b);
+    void validate_heap();
 
 public:
     int max_items;
