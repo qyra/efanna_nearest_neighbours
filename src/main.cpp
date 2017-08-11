@@ -4,12 +4,13 @@
 #include <libconfig.h++>
 #include <random>
 #include <deque>
-#include <sstream>
+#include <vector>
 
 #include "efanna_config.hpp"
 #include "kdtree.hpp"
 #include "heap.hpp"
 #include "types.hpp"
+#include "util.hpp"
 
 void load_config(struct ConfigStruct& options)
 {
@@ -27,22 +28,7 @@ void load_config(struct ConfigStruct& options)
     }
 }
 
-template<class T>
-std::string string_vector(T& target)
-{
-    std::stringstream ss;
-    ss << "(";
-    for(int i = 0; i < target.size() -1; ++i){
-        ss << target[i] << ", ";
-    }
-    if(target.size() > 0){
-        ss << target[target.size() -1];
-    }
-    ss << ")";
-    return ss.str();
-}
-
-int main(int argc, char *argv[])
+void test_kd_tree()
 {
     std::mt19937 gen(0); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_int_distribution<> dis(1, 1000);
@@ -64,8 +50,6 @@ int main(int argc, char *argv[])
             point.push_back(dis(gen));
         }
         points.push_back(point);
-
-        //~ std::cout << i << " -> " << string_vector(point) << std::endl;
     }
 
     KDTree kdtree(points);
@@ -92,12 +76,16 @@ int main(int argc, char *argv[])
 
         for(int j = 0; j < k; ++j){
             std::cout << "Neighbour Point ID:" << ids[i][j] << std::endl;
-            std::cout << string_vector(points[ids[i][j]]) << std::endl;
+            //~ std::cout << string_vector(points[ids[i][j]]) << std::endl;
             std::cout << "Cost:" << std::endl;
             std::cout << costs[i][j] << std::endl;
         }
         std::cout << std::endl;
     }
+}
 
+int main(int argc, char *argv[])
+{
+    test_kd_tree();
     return 0;
 }

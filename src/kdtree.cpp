@@ -4,8 +4,11 @@
 #include <stdexcept>
 #include <assert.h>
 #include <math.h>
+#include <cstdint> //for uintmax
 
 #include "efanna_config.hpp"
+
+const IDType LEAF_NODE_ID = UINT64_MAX;
 
 int KDTree::measure_dimensions(){
     //Validate points.
@@ -38,7 +41,7 @@ points(points)
 
     IDList* ids = new IDList;
     ids->resize(points.size());
-    for(int i = 0; i < points.size(); ++i){
+    for(IDType i = 0; i < points.size(); ++i){
         (*ids)[i] = i;
     }
 
@@ -94,7 +97,7 @@ float KDTree::distance(const Point& a, const Point& b)
 void KDTree::rQuery(BoundedHeap& results, KDNode* node, const Point& target, int depth)
 {
     //Duplicate passed neighbours so left doesn't interfere with right.
-    if (node->pivot_id < 0){
+    if (node->pivot_id == LEAF_NODE_ID){
         for(auto const& id: *(node->ids)){
             float dist = distance(target, points[id]);
             results.insert(id, dist);
@@ -142,6 +145,7 @@ KDNode* KDTree::create_tree(IDList* ids, int depth){
     std::string prefix = std::string(4 * depth, ' ');
 
     if(n <= leaf_count){
+        node->pivot_id = LEAF_NODE_ID;
         node->ids = ids;
 
         return node;
@@ -159,7 +163,7 @@ KDNode* KDTree::create_tree(IDList* ids, int depth){
     }
 }
 
-void KDTree::median_split(IDList& high_ids, IDList& low_ids, int& pivot_id, IDList& ids, int dim)
+void KDTree::median_split(IDList& high_ids, IDList& low_ids, IDType& pivot_id, IDList& ids, int dim)
 {
     //Inputs: ids, dim
     //Outputs: left_ids, right_ids, pivot

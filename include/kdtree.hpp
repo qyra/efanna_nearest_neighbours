@@ -7,16 +7,18 @@
 #include "types.hpp"
 #include "heap.hpp"
 
-//Could make this a union for better perf.
-//Either needs high, low, pivot_id
-//Or ids
-//Never both.
+//This ID is reserved for leaf nodes. Using 2^64  real nodes will
+//cause the program to break.
+
 struct KDNode
 {
     KDNode* high = nullptr;
     KDNode* low = nullptr;
     IDList* ids = nullptr;
-    int pivot_id = -1;
+    //All members will have the size of the largest member
+    //So this might as well be 64 bits instead of 32 bits. Doesn't affect
+    //memory consumption.
+    IDType pivot_id;
 };
 
 class KDTree
@@ -33,7 +35,7 @@ private:
     void delete_node(KDNode* x);
     void print_id_list(IDList ids, int dim, std::string prefix);
 
-    void median_split(IDList& high_ids, IDList& low_ids, int& pivot_id, IDList& ids, int dim);
+    void median_split(IDList& high_ids, IDList& low_ids, IDType& pivot_id, IDList& ids, int dim);
     int partition(IDList& ids, int left_i, int right_i, int dim);
 
     int measure_dimensions();
