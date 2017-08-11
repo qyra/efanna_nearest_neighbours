@@ -1,5 +1,5 @@
-Work in progress implementation of EFANNA in C++ because the existing
-implementation was a bit messy.
+An implementation of EFANNA k-nearest-neibhours search in C++. This should be significantly more efficient than using standard approaches like a KDTree or NN-expansion with graphs.
+No public interface exists yet, this is just a prototype for testing at the moment.
 
 To build in debug mode for testing:
 
@@ -28,6 +28,7 @@ Roadmap:
 * Improve testing strategy - accuracy of results is pseudorandom, but given a set seed the output will be deterministic.
 * Add cmake build options to support disabling sanitize for cachegrind, or disabling specific flags for mac.
 * Add benchmarks, compare to the original program and other implementations of KNN.
+* Make KDTree builds and graph builds parallel for better performance.
 
 Currently only linux is supported for testing, to take full advantage of the
 testing options with clang for this platform. Release builds for
