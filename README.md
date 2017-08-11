@@ -1,4 +1,4 @@
-An implementation of EFANNA k-nearest-neibhours search in C++. This should be significantly more efficient than using standard approaches like a KDTree or NN-expansion with graphs.
+An implementation of EFANNA k-nearest-neighbours search in C++. This should be significantly more efficient than using standard approaches like a KDTree or NN-expansion with graphs.
 No public interface exists yet, this is just a prototype for testing at the moment.
 
 To build in debug mode for testing:
