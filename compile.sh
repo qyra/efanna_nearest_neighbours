@@ -2,4 +2,4 @@
 set -eu
 cd build
 make
-mv efanna ../
+cp efanna ../
