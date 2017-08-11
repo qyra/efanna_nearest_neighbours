@@ -29,7 +29,7 @@ public:
     void query(std::deque<std::deque<int>>& ids, std::deque<std::deque<float>>& costs, const PointList& targets, int k);
 
 private:
-    void rQuery(BoundedHeap& results, KDNode* node, const Point& target, int depth);
+    void r_query(BoundedHeap& results, KDNode* node, const Point& target, int depth);
     float distance(const Point& a, const Point& b);
 
     void delete_node(KDNode* x);

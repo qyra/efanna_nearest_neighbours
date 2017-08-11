@@ -94,7 +94,7 @@ float KDTree::distance(const Point& a, const Point& b)
     return sqrt(sum_of_squares);
 }
 
-void KDTree::rQuery(BoundedHeap& results, KDNode* node, const Point& target, int depth)
+void KDTree::r_query(BoundedHeap& results, KDNode* node, const Point& target, int depth)
 {
     //Duplicate passed neighbours so left doesn't interfere with right.
     if (node->pivot_id == LEAF_NODE_ID){
@@ -115,15 +115,15 @@ void KDTree::rQuery(BoundedHeap& results, KDNode* node, const Point& target, int
             // This is what makes kdtree search faster than brute force.
             // if the pivot is further than tau from target, and we are on the wrong side of the split, then we don't need to search that subtree.
             if (target[dim] <= points[node->pivot_id][dim])
-                rQuery(results, node->low, target, depth+1);
+                r_query(results, node->low, target, depth+1);
 
             if (target[dim] >= points[node->pivot_id][dim])
-                rQuery(results, node->high, target, depth+1);
+                r_query(results, node->high, target, depth+1);
 
         } else {
             // Search both subtrees, either could have a nearest neighbour.
-            rQuery(results, node->low, target, depth+1);
-            rQuery(results, node->high, target, depth+1);
+            r_query(results, node->low, target, depth+1);
+            r_query(results, node->high, target, depth+1);
         }
     }
 }
@@ -134,7 +134,7 @@ void KDTree::query(std::deque<std::deque<int>>& ids, std::deque<std::deque<float
 
     for(int i = 0; i < targets.size(); ++i){
         BoundedHeap results(k);
-        rQuery(results, root, targets[i], 0);
+        r_query(results, root, targets[i], 0);
         results.collect_neighbours(costs[i], ids[i]);
     }
 }
