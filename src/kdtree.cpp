@@ -142,12 +142,10 @@ void KDTree::query(std::deque<std::deque<int>>& ids, std::deque<std::deque<float
 KDNode* KDTree::create_tree(IDList* ids, int depth){
     int n = ids->size();
     KDNode* node = new KDNode();
-    std::string prefix = std::string(4 * depth, ' ');
 
     if(n <= leaf_count){
         node->pivot_id = LEAF_NODE_ID;
         node->ids = ids;
-
         return node;
     } else {
         int dim = depth % dimensions;
@@ -168,12 +166,12 @@ void KDTree::median_split(IDList& high_ids, IDList& low_ids, IDType& pivot_id, I
     //Inputs: ids, dim
     //Outputs: left_ids, right_ids, pivot
     //Side effects: modifies order of ids
-    //high_ids is populated with all ids representing points such that point[dim] > pivot[dim}
-    //low_ids is populated with all ids such that point[dim] < pivot[dim}
-    //pivot contains an id such that about half of points are below it, and half are above it on the dimension dim.
-    //This algorithm could be done with quicksort, but this uses a variant of quickselect to make it O(n)
+    //high_ids is populated with all ids such that points[id][dim] > points[pivot][dim}
+    //low_ids is populated with all ids such that points[id][dim] < points[pivot][dim}
+    //pivot is an id such that about half of points are below it, and half are above it on the dimension dim.
+    //This uses a variant of quickselect to make it O(n)
     int n = ids.size();
-    int m = ids.size() / 2;
+    int m = n / 2;
 
     int left = 0;
     int right = n - 1;

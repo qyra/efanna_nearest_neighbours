@@ -12,13 +12,18 @@
 
 struct KDNode
 {
-    KDNode* high = nullptr;
-    KDNode* low = nullptr;
-    IDList* ids = nullptr;
-    //All members will have the size of the largest member
-    //So this might as well be 64 bits instead of 32 bits. Doesn't affect
-    //memory consumption.
     IDType pivot_id;
+
+    KDNode* high;
+    //leaf_count will always be at least 2, therefore high and low can
+    //only be used when there are no ids in this node. So it's possible
+    //to use A union to reduce node size.
+    //pivot_id will be used to differentiate child nodes from mid nodes,
+    //pivot_id == LEAF_NODE_ID iff this is a leaf node.
+    union {
+        KDNode* low;
+        IDList* ids;
+    };
 };
 
 class KDTree
