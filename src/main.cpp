@@ -31,7 +31,7 @@ void load_config(struct ConfigStruct& options)
 void test_kd_tree()
 {
     std::mt19937 gen(0); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> dis(1, 1000);
+    std::uniform_real_distribution<> dis(1, 1000);
 
     struct ConfigStruct options;
     load_config(options);
@@ -44,7 +44,7 @@ void test_kd_tree()
     //~ std::cout << "Printing Points:" << std::endl;
     PointList points;
     for(int i = 0; i< numpoints; ++i){
-        std::vector<int> point;
+        Point point;
 
         for(int j = 0; j < dimensions; ++j){
             point.push_back(dis(gen));
@@ -56,7 +56,7 @@ void test_kd_tree()
 
     PointList targets;
     for(int i = 0; i< numtargets; ++i){
-        std::vector<int> target;
+        Point target;
 
         for(int j = 0; j < dimensions; ++j){
             target.push_back(dis(gen));

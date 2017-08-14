@@ -7,6 +7,7 @@
 #include <cstdint> //for uintmax
 
 #include "efanna_config.hpp"
+#include "euclidean_distance.hpp"
 
 const IDType LEAF_NODE_ID = UINT64_MAX;
 
@@ -58,14 +59,17 @@ void KDTree::delete_node(KDNode* x){
     if(x == nullptr)
         return;
 
-    if(x->low != nullptr)
-        delete_node(x->low);
+    if(x->pivot_id == LEAF_NODE_ID){
+        if(x->ids != nullptr){
+            delete(x->ids);
+        }
+    } else {
+        if(x->low != nullptr)
+            delete_node(x->low);
 
-    if(x->high != nullptr)
-        delete_node(x->high);
+        if(x->high != nullptr)
+            delete_node(x->high);
 
-    if(x->ids != nullptr){
-        delete(x->ids);
     }
 
     delete(x);
@@ -83,31 +87,20 @@ void KDTree::print_id_list(IDList ids, int dim, std::string prefix)
     }
 }
 
-float KDTree::distance(const Point& a, const Point& b)
-{
-    //Euclidean Norm.
-    float sum_of_squares = 0;
-    for(int d = 0; d < dimensions; ++d){
-        float diff = a[d] - b[d];
-        sum_of_squares += diff*diff;
-    }
-    return sqrt(sum_of_squares);
-}
-
 void KDTree::r_query(BoundedHeap& results, KDNode* node, const Point& target, int depth)
 {
     //Duplicate passed neighbours so left doesn't interfere with right.
     if (node->pivot_id == LEAF_NODE_ID){
         for(auto const& id: *(node->ids)){
-            float dist = distance(target, points[id]);
+            float dist = norm(target, points[id], dimensions);
             results.insert(id, dist);
         }
     } else {
         // Consider pivot as a neighbour
         // Check distance along only the one dimension.
         int dim = depth % dimensions;
-        float dimension_distance = abs(target[dim] - points[node->pivot_id][dim]);
-        float euc_distance = distance(target, points[node->pivot_id]);
+        float dimension_distance = fabs(target[dim] - points[node->pivot_id][dim]);
+        float euc_distance = norm(target, points[node->pivot_id], dimensions);
 
         results.insert(node->pivot_id, euc_distance);
 
@@ -128,7 +121,10 @@ void KDTree::r_query(BoundedHeap& results, KDNode* node, const Point& target, in
     }
 }
 
-void KDTree::query(std::deque<std::deque<int>>& ids, std::deque<std::deque<float>>& costs, const PointList& targets, int k){
+void KDTree::query(std::deque<std::deque<int>>& ids,
+                   std::deque<std::deque<float>>& costs,
+                   const PointList& targets, int k)
+{
     ids.resize(targets.size());
     costs.resize(targets.size());
 

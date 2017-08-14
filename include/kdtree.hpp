@@ -35,7 +35,6 @@ public:
 
 private:
     void r_query(BoundedHeap& results, KDNode* node, const Point& target, int depth);
-    float distance(const Point& a, const Point& b);
 
     void delete_node(KDNode* x);
     void print_id_list(IDList ids, int dim, std::string prefix);
