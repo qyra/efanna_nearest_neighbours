@@ -31,7 +31,7 @@ class KDTree
 public:
     KDTree(PointList points);
     ~KDTree();
-    void query(std::deque<std::deque<int>>& ids, std::deque<std::deque<float>>& costs, const PointList& targets, int k);
+    void query(std::deque<std::deque<IDType>>& ids, std::deque<std::deque<float>>& costs, const PointList& targets, int k);
 
 private:
     void r_query(BoundedHeap& results, KDNode* node, const Point& target, int depth);

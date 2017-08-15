@@ -121,7 +121,7 @@ void KDTree::r_query(BoundedHeap& results, KDNode* node, const Point& target, in
     }
 }
 
-void KDTree::query(std::deque<std::deque<int>>& ids,
+void KDTree::query(std::deque<std::deque<IDType>>& ids,
                    std::deque<std::deque<float>>& costs,
                    const PointList& targets, int k)
 {

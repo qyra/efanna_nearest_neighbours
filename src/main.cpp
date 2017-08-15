@@ -5,6 +5,7 @@
 #include <random>
 #include <deque>
 #include <vector>
+#include <chrono>
 
 #include "efanna_config.hpp"
 #include "kdtree.hpp"
@@ -12,6 +13,12 @@
 #include "types.hpp"
 #include "util.hpp"
 #include "nn_cluster.hpp"
+
+using Clock = std::chrono::steady_clock;
+using std::chrono::time_point;
+using std::chrono::duration_cast;
+using std::chrono::microseconds;
+using namespace std::literals::chrono_literals;
 
 void load_config(struct ConfigStruct& options)
 {
@@ -30,8 +37,8 @@ void load_config(struct ConfigStruct& options)
 }
 
 struct test_data {
-    int dimensions = 10;
-    int numpoints = 100000;
+    int dimensions = 5;
+    int numpoints = 10000;
     int numtargets = 1;
     int k = 3;
     int seed = 0;
@@ -66,15 +73,24 @@ void generate_test_points(test_data& t){
 
 void test_kd_tree()
 {
+    time_point<Clock> start;
+    microseconds delta;
+
     test_data t;
     generate_test_points(t);
 
+    start = Clock::now();
     KDTree kdtree(t.points);
+    delta = duration_cast<microseconds>(Clock::now() - start);
+    std::cout << "KDTree Build Time: " << delta.count() << "ns" << std::endl;
 
-    std::deque<std::deque<int>> ids;
+    std::deque<std::deque<IDType>> ids;
     std::deque<std::deque<float>> costs;
 
+    start = Clock::now();
     kdtree.query(ids, costs, t.targets, t.k);
+    delta = duration_cast<microseconds>(Clock::now() - start);
+    std::cout << "KDTree Query Time: " << delta.count() << "ns" << std::endl;
 
     std::cout <<"Results: " << std::endl;
     for(int i = 0; i < t.numtargets; ++i){
@@ -90,31 +106,35 @@ void test_kd_tree()
 
 void test_clusters()
 {
+    time_point<Clock> start;
+    microseconds delta;
+
     test_data t;
-    t.numpoints = 10;
-    t.dimensions = 5;
     generate_test_points(t);
 
+    start = Clock::now();
     NNCluster nncluster(t.points);
+    delta = duration_cast<microseconds>(Clock::now() - start);
+    std::cout << "Cluster Build Time: " << delta.count() << "ns" << std::endl;
 
-    //~ std::deque<std::deque<int>> ids;
-    //~ std::deque<std::deque<float>> costs;
+    std::deque<std::deque<IDType>> ids;
+    std::deque<std::deque<float>> costs;
 
-    //~ kdtree.query(ids, costs, targets, k);
+    start = Clock::now();
+    nncluster.query(ids, costs, t.targets, t.k);
+    delta = duration_cast<microseconds>(Clock::now() - start);
+    std::cout << "Cluster Query Time: " << delta.count() << "ns" << std::endl;
 
-    //~ std::cout <<"Results: " << std::endl;
-    //~ for(int i = 0; i < numtargets; ++i){
-        //~ std::cout << "Target:" << std::endl;
-        //~ std::cout << string_vector(targets[i]) << std::endl;
+    std::cout <<"Results: " << std::endl;
+    for(int i = 0; i < t.numtargets; ++i){
+        std::cout << "Target:" << std::endl;
+        std::cout << string_vector(t.targets[i]) << std::endl;
 
-        //~ for(int j = 0; j < k; ++j){
-            //~ std::cout << "Neighbour Point ID:" << ids[i][j] << std::endl;
-            //~ std::cout << string_vector(points[ids[i][j]]) << std::endl;
-            //~ std::cout << "Cost:" << std::endl;
-            //~ std::cout << costs[i][j] << std::endl;
-        //~ }
-        //~ std::cout << std::endl;
-    //~ }
+        for(int j = 0; j < t.k; ++j){
+            std::cout << "Point ID: " << ids[i][j] << ", Cost: " << costs[i][j] << std::endl;
+        }
+        std::cout << std::endl;
+    }
 }
 
 int main(int argc, char *argv[])

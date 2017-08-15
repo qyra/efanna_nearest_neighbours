@@ -8,9 +8,18 @@
 std::ostream& operator<<(std::ostream& o, const BoundedHeap& b)
 {
     for(int i = 0; i < b.curr_items; ++i){
-        o <<"(" << i << ", " << b.data[i].cost << ", " << b.data[i].id << ")";
+        o <<"(id=" << b.data[i].id << ", c=" << b.data[i].cost << ", i=" << i << ")";
     }
     return o;
+}
+
+double BoundedHeap::total_cost() const
+{
+    double res = 0;
+    for(int i = 0; i < curr_items; ++i){
+        res += data[i].cost;
+    }
+    return res;
 }
 
 BoundedHeap::BoundedHeap (IDType max_items_in):
@@ -50,7 +59,7 @@ void BoundedHeap::validate_heap(){
     }
 }
 
-void BoundedHeap::collect_neighbours(std::deque<float>& costs, std::deque<int>& neighbour_ids)
+void BoundedHeap::collect_neighbours(std::deque<float>& costs, std::deque<IDType>& neighbour_ids)
 {
     costs.clear();
     neighbour_ids.clear();
@@ -65,15 +74,15 @@ void BoundedHeap::collect_neighbours(std::deque<float>& costs, std::deque<int>& 
     }
 }
 
-void BoundedHeap::insert(IDType value, float cost)
+InsertResult BoundedHeap::insert(IDType value, float cost)
 {
     if(ids.find(value) != ids.end())
-        return;
+        return InsertResult::DUPLICATE;
 
     if (curr_items >= max_items){
         //Always discard the worst item once the heap is full.
         if (cost > max_cost){
-            return;
+            return InsertResult::OVERCOST;
         }
 
         //Remove old most costly candidate
@@ -94,6 +103,8 @@ void BoundedHeap::insert(IDType value, float cost)
         if(curr_items > max_cost)
             max_cost = data[0].cost;
     }
+
+    return InsertResult::SUCCESS;
 }
 
 void BoundedHeap::swap(int a, int b)

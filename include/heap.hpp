@@ -8,6 +8,8 @@
 #include <set>
 #include <ostream>
 
+enum class InsertResult {SUCCESS, DUPLICATE, OVERCOST};
+
 class BoundedHeap
 {
 public:
@@ -15,9 +17,10 @@ public:
     BoundedHeap();
     void resize(IDType max_items);
 
-    void insert(IDType id, float cost);
-    void collect_neighbours(std::deque<float>& costs, std::deque<int>& ids);
+    InsertResult insert(IDType id, float cost);
+    void collect_neighbours(std::deque<float>& costs, std::deque<IDType>& ids);
     float tau();
+    double total_cost() const;
 
 private:
     void sift_up(int i);
