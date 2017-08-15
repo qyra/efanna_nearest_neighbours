@@ -34,12 +34,12 @@ You can remove the build folder at any time to clean up and start over.
 Roadmap:
 * Implement bounded heap (Done)
 * Implement kdtrees for filtering (Done)
-* Implement graph-clustering
+* Implement nearest neighbour expansion (In Progress)
 * Combine them all to perform faster knn search
-* Improve testing strategy - accuracy of results is pseudorandom, but given a set seed the output will be deterministic.
-* Add cmake build options to support disabling sanitize for cachegrind, or disabling specific flags for mac.
+* Add cmake build options to support disabling sanitize for cachegrind. Disable unavailable debug flags for mac.
 * Add benchmarks, compare to the original program and other implementations of KNN.
 * Make KDTree builds and graph builds parallel for better performance.
+* Create public API
 
 Currently only linux is supported for testing, to take full advantage of the
 testing options with clang for this platform. Release builds for
