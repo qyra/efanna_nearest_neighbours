@@ -35,8 +35,8 @@ int KDTree::measure_dimensions(){
     return last_size;
 }
 
-KDTree::KDTree(PointList points):
-points(points)
+KDTree::KDTree(PointList points_in):
+points(points_in)
 {
     dimensions = measure_dimensions();
 

@@ -29,53 +29,59 @@ void load_config(struct ConfigStruct& options)
     }
 }
 
-void test_kd_tree()
-{
-    std::mt19937 gen(0); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<> dis(1, 1000);
-
-    struct ConfigStruct options;
-    load_config(options);
-
+struct test_data {
     int dimensions = 10;
     int numpoints = 100000;
     int numtargets = 1;
     int k = 3;
-
-    //~ std::cout << "Printing Points:" << std::endl;
+    int seed = 0;
+    int max_real = 1000;
     PointList points;
-    for(int i = 0; i< numpoints; ++i){
+    PointList targets;
+};
+
+void generate_test_points(test_data& t){
+    std::mt19937 gen(t.seed); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(0, t.max_real);
+
+    for(int i = 0; i< t.numpoints; ++i){
         Point point;
 
-        for(int j = 0; j < dimensions; ++j){
+        for(int j = 0; j < t.dimensions; ++j){
             point.push_back(dis(gen));
         }
-        points.push_back(point);
+        t.points.push_back(point);
     }
 
-    KDTree kdtree(points);
-
-    PointList targets;
-    for(int i = 0; i< numtargets; ++i){
+    for(int i = 0; i< t.numtargets; ++i){
         Point target;
 
-        for(int j = 0; j < dimensions; ++j){
+        for(int j = 0; j < t.dimensions; ++j){
             target.push_back(dis(gen));
         }
-        targets.push_back(target);
+        t.targets.push_back(target);
     }
+
+}
+
+void test_kd_tree()
+{
+    test_data t;
+    generate_test_points(t);
+
+    KDTree kdtree(t.points);
 
     std::deque<std::deque<int>> ids;
     std::deque<std::deque<float>> costs;
 
-    kdtree.query(ids, costs, targets, k);
+    kdtree.query(ids, costs, t.targets, t.k);
 
     std::cout <<"Results: " << std::endl;
-    for(int i = 0; i < numtargets; ++i){
+    for(int i = 0; i < t.numtargets; ++i){
         std::cout << "Target:" << std::endl;
-        std::cout << string_vector(targets[i]) << std::endl;
+        std::cout << string_vector(t.targets[i]) << std::endl;
 
-        for(int j = 0; j < k; ++j){
+        for(int j = 0; j < t.k; ++j){
             std::cout << "Point ID: " << ids[i][j] << ", Cost: " << costs[i][j] << std::endl;
         }
         std::cout << std::endl;
@@ -84,39 +90,15 @@ void test_kd_tree()
 
 void test_clusters()
 {
-    std::mt19937 gen(0); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<> dis(1, 100);
+    test_data t;
+    t.numpoints = 10;
+    t.dimensions = 5;
+    generate_test_points(t);
 
-    int dimensions = 5;
-    int numpoints = 20;
-    int numtargets = 1;
-    //~ int k = 3;
+    NNCluster nncluster(t.points);
 
-    //~ std::cout << "Printing Points:" << std::endl;
-    PointList points;
-    for(int i = 0; i< numpoints; ++i){
-        Point point;
-
-        for(int j = 0; j < dimensions; ++j){
-            point.push_back(dis(gen));
-        }
-        points.push_back(point);
-    }
-
-    NNCluster nncluster(points);
-
-    PointList targets;
-    for(int i = 0; i< numtargets; ++i){
-        Point target;
-
-        for(int j = 0; j < dimensions; ++j){
-            target.push_back(dis(gen));
-        }
-        targets.push_back(target);
-    }
-
-    std::deque<std::deque<int>> ids;
-    std::deque<std::deque<float>> costs;
+    //~ std::deque<std::deque<int>> ids;
+    //~ std::deque<std::deque<float>> costs;
 
     //~ kdtree.query(ids, costs, targets, k);
 

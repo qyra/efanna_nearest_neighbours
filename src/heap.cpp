@@ -13,8 +13,8 @@ std::ostream& operator<<(std::ostream& o, const BoundedHeap& b)
     return o;
 }
 
-BoundedHeap::BoundedHeap (IDType max_items):
-max_items(max_items)
+BoundedHeap::BoundedHeap (IDType max_items_in):
+max_items(max_items_in)
 {
     data.resize(max_items);
 }
@@ -24,9 +24,9 @@ BoundedHeap::BoundedHeap()
     max_items = 0;
 }
 
-void BoundedHeap::resize(IDType max_items)
+void BoundedHeap::resize(IDType max_items_in)
 {
-    this->max_items = max_items;
+    max_items = max_items_in;
     data.resize(max_items);
 }
 
@@ -50,14 +50,14 @@ void BoundedHeap::validate_heap(){
     }
 }
 
-void BoundedHeap::collect_neighbours(std::deque<float>& costs, std::deque<int>& ids)
+void BoundedHeap::collect_neighbours(std::deque<float>& costs, std::deque<int>& neighbour_ids)
 {
     costs.clear();
-    ids.clear();
+    neighbour_ids.clear();
     while(curr_items > 0){
         Neighbour furthest = data[0];
         costs.push_front(furthest.cost);
-        ids.push_front(furthest.id);
+        neighbour_ids.push_front(furthest.id);
 
         data[0] = data[curr_items-1];
         --curr_items;

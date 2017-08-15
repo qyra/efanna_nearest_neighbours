@@ -20,7 +20,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 
 # If in debug mode, use address sanitizer.
 
-set(COMMON_FLAGS "-Wall -msse2 -msse3 -msse4 -mavx2")
+set(COMMON_FLAGS "-Wshadow -Wall -msse2 -msse3 -msse4 -mavx2")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${COMMON_FLAGS} -g -Wall -O1 -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer")
 

@@ -1,8 +1,8 @@
 #include "neighbour.hpp"
 
-Neighbour::Neighbour(IDType id, float cost):
-id(id),
-cost(cost)
+Neighbour::Neighbour(IDType id_in, float cost_in):
+id(id_in),
+cost(cost_in)
 {
 }
 

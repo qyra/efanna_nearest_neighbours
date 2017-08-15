@@ -3,11 +3,13 @@
 #include "nn_cluster.hpp"
 #include "avx_distance.hpp"
 
-NNCluster::NNCluster(PointList points):
-points(points)
+NNCluster::NNCluster(PointList points_in):
+points(points_in)
 {
     dimensions = measure_dimensions();
-    IDType n = points.size();
+    n = points.size();
+    std::cout << " n = " << n << std::endl;
+
     //~ gen.seed(rd());
     gen.seed(0);
     std::uniform_int_distribution<int> rand_index(0, n-1);
@@ -33,7 +35,9 @@ points(points)
 
 void NNCluster::nn_expand()
 {
+    std::cout << " n = " << n << std::endl;
     for(int id = 0; id < n; ++id){
+        std::cout << id << std::endl;
         //Iterate through neighbours, add all neighbours of them.
         for(auto const& n_id: clusters[id].ids){
             for(auto const& candidate: clusters[n_id].ids){
