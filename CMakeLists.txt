@@ -32,7 +32,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${COMMON_FLAGS} -Wall -O
 
 
 # Modify this to add new source files. Their .h files should be in the include folder.
-add_executable(efanna src/main.cpp src/kdtree.cpp src/heap.cpp src/euclidean_distance.cpp)
+add_executable(efanna src/main.cpp src/kdtree.cpp src/heap.cpp src/avx_distance.cpp src/nn_cluster.cpp src/neighbour.cpp)
 
 set (EXTRA_LIBS ${EXTRA_LIBS} config++)
 target_link_libraries (efanna  ${EXTRA_LIBS})

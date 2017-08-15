@@ -11,6 +11,7 @@
 #include "heap.hpp"
 #include "types.hpp"
 #include "util.hpp"
+#include "nn_cluster.hpp"
 
 void load_config(struct ConfigStruct& options)
 {
@@ -75,17 +76,68 @@ void test_kd_tree()
         std::cout << string_vector(targets[i]) << std::endl;
 
         for(int j = 0; j < k; ++j){
-            std::cout << "Neighbour Point ID:" << ids[i][j] << std::endl;
-            //~ std::cout << string_vector(points[ids[i][j]]) << std::endl;
-            std::cout << "Cost:" << std::endl;
-            std::cout << costs[i][j] << std::endl;
+            std::cout << "Point ID: " << ids[i][j] << ", Cost: " << costs[i][j] << std::endl;
         }
         std::cout << std::endl;
     }
 }
 
+void test_clusters()
+{
+    std::mt19937 gen(0); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(1, 100);
+
+    int dimensions = 5;
+    int numpoints = 20;
+    int numtargets = 1;
+    //~ int k = 3;
+
+    //~ std::cout << "Printing Points:" << std::endl;
+    PointList points;
+    for(int i = 0; i< numpoints; ++i){
+        Point point;
+
+        for(int j = 0; j < dimensions; ++j){
+            point.push_back(dis(gen));
+        }
+        points.push_back(point);
+    }
+
+    NNCluster nncluster(points);
+
+    PointList targets;
+    for(int i = 0; i< numtargets; ++i){
+        Point target;
+
+        for(int j = 0; j < dimensions; ++j){
+            target.push_back(dis(gen));
+        }
+        targets.push_back(target);
+    }
+
+    std::deque<std::deque<int>> ids;
+    std::deque<std::deque<float>> costs;
+
+    //~ kdtree.query(ids, costs, targets, k);
+
+    //~ std::cout <<"Results: " << std::endl;
+    //~ for(int i = 0; i < numtargets; ++i){
+        //~ std::cout << "Target:" << std::endl;
+        //~ std::cout << string_vector(targets[i]) << std::endl;
+
+        //~ for(int j = 0; j < k; ++j){
+            //~ std::cout << "Neighbour Point ID:" << ids[i][j] << std::endl;
+            //~ std::cout << string_vector(points[ids[i][j]]) << std::endl;
+            //~ std::cout << "Cost:" << std::endl;
+            //~ std::cout << costs[i][j] << std::endl;
+        //~ }
+        //~ std::cout << std::endl;
+    //~ }
+}
+
 int main(int argc, char *argv[])
 {
     test_kd_tree();
+    test_clusters();
     return 0;
 }

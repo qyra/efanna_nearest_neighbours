@@ -1,7 +1,8 @@
-#include "euclidean_distance.hpp"
+#include "avx_distance.hpp"
 
 #include <math.h>
 #include <immintrin.h>
+#include <iostream>
 
 inline float sum_of_squares(const int n, const float* x, const float* y)
 {
@@ -53,11 +54,12 @@ float avx2_sum_of_squares(int n, const float* x, const float* y)
     return result;
 }
 
-float norm(const Point& a, const Point& b, const int dimensions)
+float distance(const Point& a, const Point& b, const int dimensions)
 {
     float x[dimensions];
     float y[dimensions];
-    for(int i = 0; i < dimensions; ++i){
+    int i;
+    for(i = 0; i < dimensions; ++i){
         x[i] = a[i];
         y[i] = b[i];
     }
@@ -68,14 +70,3 @@ float norm(const Point& a, const Point& b, const int dimensions)
     return sqrt(sum_of_squares(dimensions, x, y));
 #endif
 }
-
-//~ float euclidean_distance(const Point& a, const Point& b, const int dimensions)
-//~ {
-    //~ //Euclidean Norm.
-    //~ float sum_of_squares = 0;
-    //~ for(int d = 0; d < dimensions; ++d){
-        //~ float diff = a[d] - b[d];
-        //~ sum_of_squares += diff*diff;
-    //~ }
-    //~ return sqrt(sum_of_squares);
-//~ }

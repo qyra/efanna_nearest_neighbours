@@ -1,23 +1,23 @@
 #pragma once
 
+#include "neighbour.hpp"
+
 #include <vector>
 #include <cfloat>
 #include <deque>
-
-struct HeapItem
-{
-    int value;
-    float cost;
-};
+#include <set>
+#include <ostream>
 
 class BoundedHeap
 {
 public:
-    BoundedHeap(int max_items);
-    void insert(int value, float cost);
+    BoundedHeap(IDType max_items);
+    BoundedHeap();
+    void resize(IDType max_items);
+
+    void insert(IDType id, float cost);
     void collect_neighbours(std::deque<float>& costs, std::deque<int>& ids);
     float tau();
-    void print_heap();
 
 private:
     void sift_up(int i);
@@ -26,9 +26,12 @@ private:
     void validate_heap();
 
 public:
+    std::set<IDType> ids;
     int max_items;
     int curr_items = 0;
     float max_cost = FLT_MAX;
 
-    std::vector<HeapItem> data;
+    std::vector<Neighbour> data;
 };
+
+std::ostream& operator<<(std::ostream& o, const BoundedHeap& b);

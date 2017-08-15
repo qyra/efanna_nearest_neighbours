@@ -7,7 +7,7 @@
 #include <cstdint> //for uintmax
 
 #include "efanna_config.hpp"
-#include "euclidean_distance.hpp"
+#include "avx_distance.hpp"
 
 const IDType LEAF_NODE_ID = UINT64_MAX;
 
@@ -92,7 +92,7 @@ void KDTree::r_query(BoundedHeap& results, KDNode* node, const Point& target, in
     //Duplicate passed neighbours so left doesn't interfere with right.
     if (node->pivot_id == LEAF_NODE_ID){
         for(auto const& id: *(node->ids)){
-            float dist = norm(target, points[id], dimensions);
+            float dist = distance(target, points[id], dimensions);
             results.insert(id, dist);
         }
     } else {
@@ -100,7 +100,7 @@ void KDTree::r_query(BoundedHeap& results, KDNode* node, const Point& target, in
         // Check distance along only the one dimension.
         int dim = depth % dimensions;
         float dimension_distance = fabs(target[dim] - points[node->pivot_id][dim]);
-        float euc_distance = norm(target, points[node->pivot_id], dimensions);
+        float euc_distance = distance(target, points[node->pivot_id], dimensions);
 
         results.insert(node->pivot_id, euc_distance);
 

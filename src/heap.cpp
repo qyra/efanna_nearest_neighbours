@@ -5,17 +5,29 @@
 
 #include "efanna_config.hpp"
 
-BoundedHeap::BoundedHeap (int max_items):
+std::ostream& operator<<(std::ostream& o, const BoundedHeap& b)
+{
+    for(int i = 0; i < b.curr_items; ++i){
+        o <<"(" << i << ", " << b.data[i].cost << ", " << b.data[i].id << ")";
+    }
+    return o;
+}
+
+BoundedHeap::BoundedHeap (IDType max_items):
 max_items(max_items)
 {
     data.resize(max_items);
 }
 
-void BoundedHeap::print_heap()
+BoundedHeap::BoundedHeap()
 {
-    for(int i = 0; i < curr_items; ++i){
-        std::cout <<"i=" << i << " cost=" << data[i].cost << " val=" << data[i].value << std::endl;
-    }
+    max_items = 0;
+}
+
+void BoundedHeap::resize(IDType max_items)
+{
+    this->max_items = max_items;
+    data.resize(max_items);
 }
 
 float BoundedHeap::tau()
@@ -31,7 +43,7 @@ void BoundedHeap::validate_heap(){
             int parent = (i-1) / 2;
             if(data[parent].cost < data[i].cost){
                 std::cout <<"Error in heap, printing" << std::endl;
-                print_heap();
+                std::cout << this << std::endl;
                 throw std::invalid_argument("Heap Invalid.");
             }
         }
@@ -43,9 +55,9 @@ void BoundedHeap::collect_neighbours(std::deque<float>& costs, std::deque<int>& 
     costs.clear();
     ids.clear();
     while(curr_items > 0){
-        HeapItem furthest = data[0];
+        Neighbour furthest = data[0];
         costs.push_front(furthest.cost);
-        ids.push_front(furthest.value);
+        ids.push_front(furthest.id);
 
         data[0] = data[curr_items-1];
         --curr_items;
@@ -53,21 +65,29 @@ void BoundedHeap::collect_neighbours(std::deque<float>& costs, std::deque<int>& 
     }
 }
 
-void BoundedHeap::insert(int value, float cost)
+void BoundedHeap::insert(IDType value, float cost)
 {
+    if(ids.find(value) != ids.end())
+        return;
+
     if (curr_items >= max_items){
         //Always discard the worst item once the heap is full.
         if (cost > max_cost){
             return;
         }
 
+        //Remove old most costly candidate
+        ids.erase(data[0].id);
+        //Add the new ID
+        ids.insert(value);
         data[0].cost = cost;
-        data[0].value = value;
+        data[0].id = value;
         sift_down();
         max_cost = data[0].cost;
     } else {
+        ids.insert(value);
         data[curr_items].cost = cost;
-        data[curr_items].value = value;
+        data[curr_items].id = value;
         sift_up(curr_items);
         ++curr_items;
 
@@ -78,7 +98,7 @@ void BoundedHeap::insert(int value, float cost)
 
 void BoundedHeap::swap(int a, int b)
 {
-    HeapItem temp = data[a];
+    Neighbour temp = data[a];
     data[a] = data[b];
     data[b] = temp;
 }
