@@ -1,6 +1,6 @@
-#EFANNA k-nearest-neighbours search in C++.
+# EFANNA k-nearest-neighbours search in C++.
 
-###Objective:
+### Objective:
 This should be significantly more efficient than using standard approaches like a KDTree or NN-expansion with graphs because it uses a hybrid approach to take advantage of the best features of both options. (Fast KDTree builds for small datasets, scalable NN-Expansion performance for arbitrarily large datasets). Vectorized distance calculations with SSE and multithreaded builds also speed up use significantly.
 
 No public interface exists yet, this is just a prototype for testing at the moment.
